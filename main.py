@@ -5,9 +5,8 @@ import shutil
 import numpy as np
 import pandas as pd
 
-from env.ParisWorld import ParisWorld
 from sklearn.linear_model import LinearRegression
-from env.ParisRealWorld import ParisRealWorld
+from env.RealWorld import RealWorld
 
 
 class Benchmark:
@@ -27,7 +26,7 @@ class Benchmark:
         self.is_recommend = env_config["IsRecommended"]
 
         # INITIALIZE THE ENV
-        self.world = ParisRealWorld(avail_prob=self.avail_prob)
+        self.world = RealWorld(avail_prob=self.avail_prob)
         # Plan size
         self.dimension = len(self.world.station_data)
         # Time length of each time period
@@ -321,15 +320,16 @@ def standard_unfairness(values):
 
 if __name__ == '__main__':
 
-    misbehaved_ratio = 0
     config = {
-        "repetition": 100,
-        "steps": 12,
-        "slots_avail": 0.5,
-        "beta": 0.5,
-        "IsObserved": True,
-        "IsRecommended": True,
+        "repetition": 100,      # Set the number of repetitions
+        "steps": 12,            # Set the number of time windows
+        "slots_avail": 0.5,     # Set the ratio of available charging slots over total number of slots
+        "beta": 0.5,            # Set the behavior value
+        "IsObserved": True,     # Whether the discomfort includes the observed queuing time
+        "IsRecommended": True,  # Whether to use behavior recommendation mechanism
     }
+    misbehaved_ratio = 0  # Set the fraction of adversarial EVs
+
     bench = Benchmark(config)
     outputs = bench.run()
 

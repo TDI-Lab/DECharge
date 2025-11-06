@@ -3,11 +3,11 @@ import numpy as np
 import os
 
 
-class ParisRealWorld:
+class RealWorld:
 
     def __init__(self, avail_prob=1):
         # 1. Method to distribute spatio-temporal EVs: Read dataset
-        data_path_parent = os.path.join(os.getcwd(), f'datasets/ParisChargingDemands_real/')
+        data_path_parent = os.path.join(os.getcwd(), f'datasets/ChargingDemands/')
         data_generated = []
         for file in os.listdir(data_path_parent):
             if '_06_2022' in file or '_07_2022' in file or '_08_2022' in file or '_09_2022' in file \
@@ -19,7 +19,7 @@ class ParisRealWorld:
         self.data_test = data_generated[int(len(data_generated) * 0.7):]
 
         # 2. Set features to station, including x, y
-        self.station_data = pd.read_csv(os.getcwd() + f'/datasets/info_static_{avail_prob}.csv')
+        self.station_data = pd.read_csv(os.getcwd() + f'/datasets/Stations/info_static_{avail_prob}.csv')
         # 2.1. previous, merge all slots in the same station and counts the number of slots
         slots_arr = self.station_data.groupby('s_id', as_index=False)['Availability'].sum()['Availability'].to_numpy()
         self.station_data = self.station_data.drop_duplicates(subset=['s_id'])
